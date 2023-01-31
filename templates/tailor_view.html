@@ -1,0 +1,40 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card">
+    <h5 class="card-header">Tailors</h5>
+    <div class="card-body">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="btn btn-primary" href="{% url 'tailor_register' %}">Add</a>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Sl No.</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+            <tr>
+                <th>{{forloop.counter}}</th>
+                <td>{{i.username}}</td>
+                <td>{{i.name}}</td>
+                <td>{{i.email}}</td>
+                <td>{{i.phone_no}}</td>
+                <td>{{i.address}}</td>
+                <td><a class="btn btn-success" href="">Edit</a></td>
+                <td><a class="btn btn-danger" href="">Delete</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
