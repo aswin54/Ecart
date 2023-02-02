@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from app.filters import UserFilter
-from app.forms import CustomUserForm, CustomUserUpdateForm, Dresscategoryform
-from app.models import CustomUser, DressCategory
+from app.forms import CustomUserForm, CustomUserUpdateForm, Dresscategoryform, DressForm
+from app.models import CustomUser, DressCategory, Dress
 
 
 # Create your views here.
@@ -71,5 +71,38 @@ def dresscategory_delete(request,id):
     data.delete()
     messages.success(request, 'DressCategory deleted')
     return redirect('dresscategory_view')
+
+def dress_add(request):
+    form = DressForm()
+    if request.method == 'POST':
+        form = DressForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request,'Dress Added')
+            return redirect('dress_view')
+    return render(request,'dress_add.html',{'form':form})
+
+def dress_view(request):
+    data = Dress.objects.all()
+    return render(request,'dress_view.html',{'data':data})
+
+def dress_update(request,id):
+    data = Dress.objects.get(id=id)
+    form = DressForm(instance=data)
+    if request.method == 'POST':
+        form = DressForm(request.POST or None,request.FILES or None,instance=data or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Dress Updated')
+            return redirect('dress_view')
+    return render(request,'dress_update.html',{'form':form})
+
+def dress_delete(request,id):
+    data = Dress.objects.get(id=id)
+    data.delete()
+    messages.success(request, 'Dress deleted')
+    return redirect('dress_view')
+
+
 
 

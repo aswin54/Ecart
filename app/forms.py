@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-from app.models import CustomUser, DressCategory
+from app.models import CustomUser, DressCategory, Dress
 
 
 def phone_number_validator(value):
@@ -48,4 +48,9 @@ class Dresscategoryform(forms.ModelForm):
     class Meta:
         model = DressCategory
         fields = ('name',)
+
+class DressForm(forms.ModelForm):
+    class Meta:
+        model = Dress
+        fields = '__all__'
 

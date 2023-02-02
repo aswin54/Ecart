@@ -1,0 +1,51 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{% endfor %}
+<div class="card">
+    <h5 class="card-header">Dress Category</h5>
+    <div class="card-body">
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <div class="ml-3" style="margin-left:13px"> <a class="btn btn-primary " href="{% url 'dress_add' %}">Add</a></div>
+
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Sl No.</th>
+                <th>Category</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+            <tr>
+                <th>{{forloop.counter}}</th>
+                <td>{{i.category}}</td>
+                <td>{{i.title}}</td>
+                <td>{{i.description}}</td>
+                <td>Rs.{{i.price}}</td>
+                <td><img src="{{i.photo.url}}" alt="dresses" height="80px" width="80px"/></td>
+                <td><a class="btn btn-success">Update</a></td>
+                <td><a class="btn btn-danger" href="{% url 'dress_delete' i.id %}">Delete</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align:center">No data Found</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

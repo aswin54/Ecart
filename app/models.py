@@ -11,3 +11,12 @@ class CustomUser(AbstractUser):
 
 class DressCategory(models.Model):
     name = models.CharField(max_length=25)
+
+    def __str__(self):
+        return self.name
+class Dress(models.Model):
+    category = models.ForeignKey(DressCategory,on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    description = models.TextField()
+    price = models.FloatField(null=True)
+    photo = models.ImageField(upload_to='DressLists')
