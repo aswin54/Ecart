@@ -1,12 +1,24 @@
 {% extends 'index.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{% endfor %}
 <div class="card">
     <h5 class="card-header">Tailors</h5>
     <div class="card-body">
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <a class="btn btn-primary" href="{% url 'tailor_register' %}">Add</a>
+            <form method="get" class="form-inline d-flex">
+                {{tailorFilter.form|crispy}}
+                  <button class="btn btn-info " style="float:right" type="submit">Search</button>
+                <div class="ml-3" style="margin-left:13px"> <a class="btn btn-primary " href="{% url 'tailor_register' %}">Add</a></div>
+
+            </form>
+
         </div>
+
         <table class="table">
             <thead>
             <tr>
@@ -29,8 +41,8 @@
                 <td>{{i.email}}</td>
                 <td>{{i.phone_no}}</td>
                 <td>{{i.address}}</td>
-                <td><a class="btn btn-success" href="">Edit</a></td>
-                <td><a class="btn btn-danger" href="">Delete</a></td>
+                <td><a class="btn btn-success" href="{% url 'tailor_edit' i.id %}">Edit</a></td>
+                <td><a class="btn btn-danger" href="{% url 'tailor_delete' i.id %}">Delete</a></td>
             </tr>
             {% endfor %}
             </tbody>

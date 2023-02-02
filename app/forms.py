@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-from app.models import CustomUser
+from app.models import CustomUser, DressCategory
 
 
 def phone_number_validator(value):
@@ -17,9 +17,9 @@ class CustomUserForm(UserCreationForm):
     username = forms.CharField(label='Username')
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
-    class Meta:
+    class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ('username', 'name','password1', 'password2', 'email','phone_no','address')
+        fields = UserCreationForm.Meta.fields + ('name','email','phone_no','address')
 
     def clean_email(self):
         mail = self.cleaned_data['email']
@@ -34,3 +34,18 @@ class CustomUserForm(UserCreationForm):
         if mobile_qs.exists():
             raise forms.ValidationError('This mobile number already registered')
         return mobile
+
+class CustomUserUpdateForm(UserCreationForm):
+    username = forms.CharField(label='Username')
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    class Meta(UserCreationForm.Meta):
+        model = CustomUser
+        fields = UserCreationForm.Meta.fields +('name','email','phone_no','address')
+
+class Dresscategoryform(forms.ModelForm):
+    name = forms.CharField(label='Category Name')
+    class Meta:
+        model = DressCategory
+        fields = ('name',)
+

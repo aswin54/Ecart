@@ -8,3 +8,6 @@ class CustomUser(AbstractUser):
     name = models.CharField(max_length=25,null=True)
     address = models.TextField(null=True)
     phone_no = models.CharField(max_length=25,null=True)
+
+class DressCategory(models.Model):
+    name = models.CharField(max_length=25)
