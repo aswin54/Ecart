@@ -20,3 +20,11 @@ class Dress(models.Model):
     description = models.TextField()
     price = models.FloatField(null=True)
     photo = models.ImageField(upload_to='DressLists')
+
+class Leave(models.Model):
+    tailor = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    reason = models.TextField()
+    submitted_on = models.DateField()
+    approval = models.IntegerField(default=0)

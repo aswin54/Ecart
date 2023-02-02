@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+    {{message}}
+</div>
+{% endfor %}
+<div class="card">
+    <h5 class="card-header">Dresscategory Add</h5>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{form|crispy}}
+            </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+    </div>
+</div>
+{% endblock %}

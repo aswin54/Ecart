@@ -1,14 +1,18 @@
+import datetime
+
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 
 from app.filters import UserFilter
-from app.forms import CustomUserForm, CustomUserUpdateForm, Dresscategoryform, DressForm
-from app.models import CustomUser, DressCategory, Dress
+from app.forms import CustomUserForm, CustomUserUpdateForm, Dresscategoryform, DressForm, LeaveForm
+from app.models import CustomUser, DressCategory, Dress, Leave
 
 
 # Create your views here.
-def home(request):
-    return render(request,'index.html')
+##############################ADMIN#################################
+def admin_home(request):
+    return render(request,'admintemp/index.html')
 
 def tailor_register(request):
     form = CustomUserForm()
@@ -84,6 +88,14 @@ def dress_add(request):
 
 def dress_view(request):
     data = Dress.objects.all()
+    page = request.GET.get('page',1)
+    paginator = Paginator(data,2)
+    try:
+        data = paginator.page(page)
+    except PageNotAnInteger:
+        data = paginator.page(1)
+    except EmptyPage:
+        data = paginator.page(paginator.num_pages)
     return render(request,'dress_view.html',{'data':data})
 
 def dress_update(request,id):
@@ -102,6 +114,27 @@ def dress_delete(request,id):
     data.delete()
     messages.success(request, 'Dress deleted')
     return redirect('dress_view')
+
+#################################Tailor#########################################
+def tailor_home(request):
+    return render(request,'tailortemp/index.html')
+
+def apply_leave(request):
+    form = LeaveForm()
+    if request.method == 'POST':
+        form = LeaveForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.tailor = request.user
+            form.submitted_on = datetime.date.today()
+            form.save()
+            messages.success(request,'Leave Application Send')
+            return redirect('view_leave')
+    return render(request,'tailortemp/apply_leave.html',{'form':form})
+
+def view_leave(request):
+    data = Leave.objects.filter(tailor=request.user)
+    return render(request,'tailortemp/view_leave.html',{'data':data})
 
 
 

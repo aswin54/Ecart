@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from django import forms
@@ -5,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-from app.models import CustomUser, DressCategory, Dress
+from app.models import CustomUser, DressCategory, Dress, Leave
 
 
 def phone_number_validator(value):
@@ -53,4 +54,26 @@ class DressForm(forms.ModelForm):
     class Meta:
         model = Dress
         fields = '__all__'
+
+class DateInput(forms.DateInput):
+     input_type = 'date'
+class LeaveForm(forms.ModelForm):
+    from_date = forms.DateField(widget=DateInput)
+    to_date = forms.DateField(widget=DateInput)
+    class Meta:
+        model = Leave
+        fields = ('from_date','to_date','reason')
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+        from_date = cleaned_data.get('from_date')
+        to_date = cleaned_data.get('to_date')
+
+        if from_date < datetime.date.today():
+            raise forms.ValidationError('Invalid From Date')
+        if to_date < from_date:
+            raise forms.ValidationError('Invalid To Date')
+
+        return cleaned_data
 
